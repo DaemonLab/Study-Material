@@ -1,28 +1,13 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  googleId: {
+  name: {
     type: String,
     required: true,
   },
-  displayName: {
+  email: {
     type: String,
     required: true,
-  },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
   },
   isAdmin: {
     type: Boolean,
@@ -30,12 +15,20 @@ const UserSchema = new mongoose.Schema({
   },
   branch: {
     type: String,
-    required: true,
+    required: false,
   },
   rollno: {
     type: Number,
-    required: true,
-  }
+    required: false,
+  },
+  year: {
+    type: Number,
+    required: false,
+  },
+  lastLogin: {
+    type: Date,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);

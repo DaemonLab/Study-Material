@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { GoogleCredentialResponse } from "@react-oauth/google";
 import "./Styles.css";
-import { BsGoogle } from "react-icons/bs";
-import axios from 'axios';
+import axios from "axios";
 
 function Login() {
+  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
 
-  const [firstLogin, setFirstLogin] = useState(false);
-  
-  useEffect(() => {
-    axios.get("http://localhost:3001/login").then((resposne) => {
-      console.log('here')
-    });
-  }, [])
-  
-
-  const login = () => {
-    console.log('here')
-    axios.get('http://localhost:3001/auth/google').then((response) => {
+  const handleSuccess = async (tokenId) => {
+    console.log(tokenId);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/google",
+        tokenId
+      );
       console.log(response.data);
-      setFirstLogin(response.data)
-    })
-  }
+      const { token } = response.data;
+      await setToken(token);
+      navigate("/register");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleFailure = () => {
+    console.log("Failed to authenticate with Google");
+  };
 
   return (
     <>
@@ -54,25 +61,24 @@ function Login() {
               alt="study-material"
             />
           </div>
-          <div
-            className="col-md-8"
-            style={{ marginTop: "auto", marginBottom: "auto" }}
-          >
+          <div className="col-md-8">
             <div className="card-body">
               <h3>Login with your insititute google account</h3>
             </div>
 
             <div className="form-floating">
-              <form>
-                <button
-                  class="btn login"
-                  type="submit"
-                  onClick={login}
-                  style={{ color: "white" }}
-                >
-                  <BsGoogle /> Login with Google
-                </button>
-              </form>
+              {token ? (
+                <div>You are logged in with token: {token}</div>
+              ) : (
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    handleSuccess(credentialResponse);
+                  }}
+                  onError={() => {
+                    handleFailure();
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
