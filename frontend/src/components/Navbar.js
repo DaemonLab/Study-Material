@@ -1,7 +1,9 @@
 import React from 'react'
+import {useNavigate} from "react-router-dom";
 import "./Styles.css"
 
 export default function Navbar() {
+const navigate=useNavigate();
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
   <div className="container-fluid">
@@ -24,7 +26,7 @@ export default function Navbar() {
       </form>
       <ul  className="navbar-nav mb-2 mb-lg-0 ms-1">
         <li>
-          <button className="btn btn-secondary me-1">Login</button>
+          <button className="btn btn-secondary me-1" onClick={()=>navigate('/')}>Login</button>
         </li>
         <li>
           <button className="btn btn-danger">Logout</button>

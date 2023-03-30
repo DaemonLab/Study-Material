@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Styles.css";
-import { BsGoogle } from 'react-icons/bs'
+import { BsGoogle } from "react-icons/bs";
+import axios from 'axios';
 
 function Login() {
+
+  const [firstLogin, setFirstLogin] = useState(false);
+  
+  useEffect(() => {
+    axios.get("http://localhost:3001/login").then((resposne) => {
+      console.log('here')
+    });
+  }, [])
+  
+
+  const login = () => {
+    console.log('here')
+    axios.get('http://localhost:3001/auth/google').then((response) => {
+      console.log(response.data);
+      setFirstLogin(response.data)
+    })
+  }
+
   return (
     <>
       <div class="container my-2" id="loginHeading">
@@ -35,20 +54,25 @@ function Login() {
               alt="study-material"
             />
           </div>
-          <div className="col-md-8" style={{ marginTop:"auto", marginBottom:"auto"}}>
+          <div
+            className="col-md-8"
+            style={{ marginTop: "auto", marginBottom: "auto" }}
+          >
             <div className="card-body">
               <h3>Login with your insititute google account</h3>
             </div>
-            
+
             <div className="form-floating">
-            
-              <button
-                class="btn login"
-                type="submit"
-                style={{ color: "white" }}
-              >
-                <BsGoogle />   Login with Google
-              </button>
+              <form>
+                <button
+                  class="btn login"
+                  type="submit"
+                  onClick={login}
+                  style={{ color: "white" }}
+                >
+                  <BsGoogle /> Login with Google
+                </button>
+              </form>
             </div>
           </div>
         </div>

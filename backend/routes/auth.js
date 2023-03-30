@@ -3,9 +3,6 @@ const passport = require('passport')
 const router = express.Router()
 require('../config/passport')
 
-const {googleauth} = require("../config/passport")
-googleauth(passport)
-
 
 
 // @desc    Auth with Google
@@ -23,9 +20,9 @@ router.get(
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     if(firstLogin){
-      res.redirect('/register')
+      res.send(true)
     } else {
-      res.redirect('/dashboard')
+      res.send(false)
     }
   }
 )
@@ -35,7 +32,7 @@ router.get(
 router.get('/logout', (req, res, next) => {
   req.logout((error) => {
       if (error) {return next(error)}
-      res.redirect('/')
+      res.send('Logout successfull')
   })
 })
 

@@ -13,6 +13,8 @@ connectDB();
 
 const app = express();
 
+const {googleauth} = require("./config/passport")
+googleauth(passport)
 
 
 app.use(express.json());
@@ -38,10 +40,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", require('./routes/login'));
+app.use("/login", require('./routes/login'));
 app.use("/dashboard", require('./routes/addCourse'));
 
-app.use('/auth', require('./routes/auth'))  
+app.use('/auth', require('./routes/auth'))
+
 app.use('/dashboard', require('./routes/dashboard'))
 
 app.listen(config.port, () => {
