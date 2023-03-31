@@ -4,6 +4,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { GoogleCredentialResponse } from "@react-oauth/google";
 import "./Styles.css";
 import axios from "axios";
+import jwt_decode from "jsonwebtoken";
 
 function Login() {
   const [token, setToken] = useState(null);
@@ -11,18 +12,24 @@ function Login() {
 
   const handleSuccess = async (tokenId) => {
     console.log(tokenId);
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/auth/google",
-        tokenId
-      );
-      console.log(response.data);
-      const { token } = response.data;
-      await setToken(token);
-      navigate("/register");
-    } catch (error) {
-      console.log(error);
-    }
+
+    await axios
+      .post("http://localhost:8080/auth/google/", tokenId, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        const { token, isFirstLogin } = response.data;
+        setToken(token);
+        if (isFirstLogin) navigate("/register");
+        else navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleFailure = () => {
@@ -72,7 +79,7 @@ function Login() {
               ) : (
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
-                    handleSuccess(credentialResponse);
+                    return handleSuccess(credentialResponse);
                   }}
                   onError={() => {
                     handleFailure();
