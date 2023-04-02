@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { GoogleCredentialResponse } from "@react-oauth/google";
 import "./Styles.css";
 import axios from "axios";
-import jwt_decode from "jsonwebtoken";
+import jwt from "jwt-decode";
+import { LoginContext } from "../contexts/LoginContext";
 
 function Login() {
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
+  const logindetails = useContext(LoginContext);
+  const { toggleAdmin, toggleLoggedIn } = useContext(LoginContext);
+
+  const handleFailure = () => {
+    console.log("Failed to authenticate with Google");
+  };
 
   const handleSuccess = async (tokenId) => {
     console.log(tokenId);
-
     await axios
       .post("http://localhost:8080/auth/google/", tokenId, {
         headers: {
@@ -22,18 +28,18 @@ function Login() {
       })
       .then((response) => {
         console.log(response.data);
-        const { token, isFirstLogin } = response.data;
+        const token = response.data;
         setToken(token);
-        if (isFirstLogin) navigate("/register");
+        const details = jwt(token);
+        console.log(details);
+        if(details.isAdmin) toggleAdmin();
+        toggleLoggedIn();
+        if (details.isFirstLogin) navigate("/register");
         else navigate("/dashboard");
       })
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  const handleFailure = () => {
-    console.log("Failed to authenticate with Google");
   };
 
   return (
@@ -68,23 +74,39 @@ function Login() {
               alt="study-material"
             />
           </div>
-          <div className="col-md-8">
+          <div className="col-md-8" style={{ margin: "auto" }}>
             <div className="card-body">
               <h3>Login with your insititute google account</h3>
             </div>
 
-            <div className="form-floating">
+            <div
+              className="form-floating"
+              style={{
+                marginTop: "auto",
+                marginBottom: "auto",
+                marginRight: "auto",
+              }}
+            >
               {token ? (
                 <div>You are logged in with token: {token}</div>
               ) : (
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    return handleSuccess(credentialResponse);
-                  }}
-                  onError={() => {
-                    handleFailure();
-                  }}
-                />
+                <div style={{ marginLeft: "13%" }}>
+                  <GoogleLogin
+                    type="standard"
+                    theme="filled_blue"
+                    size="large"
+                    text="continue_with"
+                    shape="pill"
+                    width="1000"
+                    logo_alignment="center"
+                    onSuccess={(credentialResponse) => {
+                      return handleSuccess(credentialResponse);
+                    }}
+                    onError={() => {
+                      handleFailure();
+                    }}
+                  />
+                </div>
               )}
             </div>
           </div>

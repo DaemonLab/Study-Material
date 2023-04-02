@@ -35,11 +35,7 @@ app.use("/auth", require("./routes/auth"));
 
 app.use("/dashboard", require("./routes/dashboard"));
 
-app.post("/auth/googleone/", (req, res) => {
-  console.log(req.body);
-  res.end("done");
-  // res.send(200).json(req.body)
-});
+app.use('/material', require('./routes/material'));
 
 app.listen(config.port, () => {
   console.log("App is listening on url http://localhost:" + config.port);

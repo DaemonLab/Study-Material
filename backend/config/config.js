@@ -18,6 +18,8 @@ const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   MONGO_URI,
+  REDIRECT_URI,
+  REFRESH_TOKEN,
 } = process.env;
 
 assert(PORT, "PORT is required");
@@ -37,5 +39,7 @@ module.exports = {
   },
   googleClientId: GOOGLE_CLIENT_ID,
   googleClientSecret: GOOGLE_CLIENT_SECRET,
-  mongoUri : MONGO_URI,
+  mongoUri: MONGO_URI,
+  redirectUri: REDIRECT_URI,
+  refreshToken: REFRESH_TOKEN,
 };

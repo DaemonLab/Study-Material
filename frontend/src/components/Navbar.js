@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Styles.css";
+import { LoginContext } from "../contexts/LoginContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const logindetails = useContext(LoginContext);
+  const { toggleLoggedIn } = useContext(LoginContext);
+  console.log(logindetails);
+  const logout = () => {
+    toggleLoggedIn();
+    navigate("/");
+  }
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg bg-dark navbar-dark" style={{color:"white"}}>
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           <img
@@ -52,15 +60,19 @@ export default function Navbar() {
           </form>
           <ul className="navbar-nav mb-2 mb-lg-0 ms-1">
             <li>
-              <button
-                className="btn btn-secondary me-1"
-                onClick={() => navigate("/")}
-              >
-                Login
-              </button>
+              {!logindetails.isLoggedIn && (
+                <button
+                  className="btn btn-secondary me-1"
+                  onClick={() => navigate("/")}
+                >
+                  Login
+                </button>
+              )}
             </li>
             <li>
-              <button className="btn btn-danger">Logout</button>
+              {logindetails.isLoggedIn && (
+                <button className="btn btn-danger" onClick={()=>{ logout(); }} >Logout</button>
+              )}
             </li>
           </ul>
         </div>
