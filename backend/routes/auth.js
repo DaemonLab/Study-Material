@@ -37,6 +37,7 @@ router.post("/google", async (req, res) => {
     verify()
       .then((response) => {
         res.status(200).send(response);
+        localStorage.setItem('token', response.token)
       })
       .catch((error) => {
         res.status(201).send(error);
