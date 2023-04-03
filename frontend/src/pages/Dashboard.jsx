@@ -1,12 +1,52 @@
-import React from "react";
+import React, { Component, useContext, useState, useEffect } from "react";
 import "./Styles.css";
 import LectureNotes from "./Images/lectureNotes.png";
 import LectureSlides from "./Images/lectureSlides.jpg";
 import Tutorials from "./Images/tutorials.jpg";
 import QuestionPapers from "./Images/qPapers.jpg";
 import Books from "./Images/books.jpg";
+import LoginContextProvider from "../contexts/LoginContext";
+import { LoginContext } from "../contexts/LoginContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+Dashboard.contextType = LoginContext;
 
 function Dashboard() {
+  const [name, setName] = useState("");
+  const [course, setCourse] = useState("");
+  const [type, setType] = useState("");
+  const [file, setFile] = useState();
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const logindetails = useContext(LoginContext);
+  console.log(logindetails);
+  const navigate = useNavigate();
+
+  async function upload(e) {
+
+    let data = new FormData();
+    data.append("name", name);
+    data.append("course", course);
+    data.append("type", type);
+    data.append("file", file);
+    e.preventDefault();
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+    await axios
+      .post("http://localhost:8080/material/upload", data, config)
+      .then((response) => {
+        alert("Upload Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <div>
       <style>
@@ -46,7 +86,14 @@ function Dashboard() {
               <p className="card-text">
                 Based on content delivered by our expert faculty
               </p>
-              <button className="btn btn-secondary">View More</button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  navigate("/notes");
+                }}
+              >
+                View More
+              </button>
             </div>
           </div>
 
@@ -89,27 +136,66 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="container" style={{ marginTop: "2%", marginBottom:"2%" }}>
-        <h2 className="mx-1" style={{ margin: "2%" }}>
-          Upload New Material
-        </h2>
-        <input className="form-control" type="file" name="" id="" /><br />
-        <select class="form-select" placeholder="Type">
-          <option selected>Select the type of this document</option>
-          <option value="1">Lecture Notes</option>
-          <option value="2">Tutorial</option>
-          <option value="3">Question Paper</option>
-          <option value="4">Book</option>
-        </select><br />
-        <select class="form-select" placeholder="Type">
-          <option selected>Course Pertained</option>
-          <option value="1">MA105</option>
-          <option value="2">PH105</option>
-          <option value="3">PH106</option>
-          <option value="4">HS159</option>
-        </select><br />
-        <button className="btn btn-secondary">Upload</button>
-      </div>
+      {logindetails.isAdmin && (
+        <div
+          className="container"
+          style={{ marginTop: "2%", marginBottom: "2%" }}
+        >
+          <h2 className="mx-1" style={{ margin: "2%" }}>
+            Upload New Material
+          </h2>
+          <form>
+            <label htmlFor="name">Name of the material</label>
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+            <input
+              className="form-control"
+              type="file"
+              name="file"
+              id="file"
+              onChange={handleFileChange}
+            />
+            <br />
+            <select
+              class="form-select"
+              placeholder="Type"
+              onChange={(e) => {
+                setType(e.target.value);
+              }}
+            >
+              <option selected>Select the type of this document</option>
+              <option value="Lecture Notes">Lecture Notes</option>
+              <option value="Tutorial">Tutorial</option>
+              <option value="Question Paper">Question Paper</option>
+              <option value="Book">Book</option>
+            </select>
+            <br />
+            <label htmlFor="course">Course Code (without spaces) </label>
+            <input
+              type="text"
+              className="form-control"
+              name="course"
+              onChange={(e) => {
+                setCourse(e.target.value);
+              }}
+            />
+            <br />
+            <button
+              type="submit"
+              className="btn btn-secondary"
+              onClick={upload}
+            >
+              Upload
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

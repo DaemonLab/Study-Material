@@ -28,15 +28,18 @@ router.post("/google", async (req, res) => {
       if (!user) {
         // This is the user's first login
         user = await User.create({ name, email });
+        isFirstLogin = true;
+      } else {
+        isFirstLogin = false;
       }
       const token = jwt.sign(
-        { name, email, isFirstLogin: !user.lastLogin },
+        { name, email, isFirstLogin: !user.lastLogin, isAdmin: user.isAdmin },
         jwtSecret
       );
       user.lastLogin = Date.now();
       await user.save();
-      console.log(token, isFirstLogin);
-      return { token, isFirstLogin };
+      console.log(isFirstLogin);
+      return token;
     }
     verify()
       .then((response) => {

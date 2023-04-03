@@ -83,11 +83,11 @@ function Register() {
                       value={branch}
                       onChange={(e) => setBranch(e.target.value)}
                     >
-                      <option selected>CSE</option>
-                      <option value="1">EE</option>
-                      <option value="2">ME</option>
-                      <option value="3">CE</option>
-                      <option value="4">MEMS</option>
+                      <option value="CSE">CSE</option>
+                      <option value="EE">EE</option>
+                      <option value="ME">ME</option>
+                      <option value="CE">CE</option>
+                      <option value="MEMS">MEMS</option>
                     </select>
                     <label htmlFor="floatingSelectGrid">Branch</label>
                   </div>
