@@ -78,24 +78,6 @@ router.post('/register', async (req, res) => {
       console.log(error)
     }
   }
-
-  // if(user['rollno'] || user['branch'] || user['year']){
-  //     console.log("User already registered.")
-  //     res.end("User already registered.")
-  // }
-  // user.rollno =  data['rollno']
-  // user.branch = data['branch']
-  // user.year = data['year']
-
-  // await user.save()
-  // .then((response) => {
-  //   res.status(200).send(response);
-  // })
-  // .catch((error) => {
-  //   res.status(201).send(error);
-  // });
-
-  
 });
 
 module.exports = router;
