@@ -4,16 +4,8 @@ const jwt = require('jsonwebtoken')
 const User = require("../models/User");
 const router = express.Router()
 
-const {LocalStorage} = require('node-localstorage');
-const localStorage = new LocalStorage('./scratch');
-
 router.post('/register', async (req, res) => {
     const data = req.body;
-    console.log(data)
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
-
     const isFirstLogin = decodedToken.isFirstLogin;
     const user = await User.findOne({email})
 

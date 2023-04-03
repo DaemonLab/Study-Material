@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate, redirect } from "react-router-dom";
 
 function Register() {
   const [rollno, setRollno] = useState("");
@@ -8,7 +9,7 @@ function Register() {
   async function register(e) {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/register', {
+      const response = await fetch('http://localhost:8080/auth/register', {
         method: 'POST',
         body: JSON.stringify({rollno, branch, year}),
         headers: {'Content-Type':'application/json'},
