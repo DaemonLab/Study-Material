@@ -5,6 +5,10 @@ const crypto = require("crypto");
 const User = require("../models/User");
 const config = require("../config/config");
 const jwtSecret = crypto.randomBytes(64).toString("hex");
+
+const {LocalStorage} = require('node-localstorage');
+const localStorage = new LocalStorage('./scratch');
+
 const router = express.Router();
 router.post("/google", async (req, res) => {
   try {

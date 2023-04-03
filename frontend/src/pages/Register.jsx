@@ -7,16 +7,20 @@ function Register() {
 
   async function register(e) {
     e.preventDefault();
-    const response = await fetch('http://localhost:3001/register', {
-      method: 'POST',
-      body: JSON.stringify({rollno, branch, year}),
-      headers: {'Content-Type':'application/json'},
-    });
-    if(response.status === 200) {
-      alert('Registration Successfull');
-      
-    } else {
-      alert('Registration failed.');
+    try {
+      const response = await fetch('http://localhost:8080/register', {
+        method: 'POST',
+        body: JSON.stringify({rollno, branch, year}),
+        headers: {'Content-Type':'application/json'},
+      });
+      if(response.status === 200) {
+        alert('Registration Successfull');
+      } else {
+        alert('Registration failed.');
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error);
     }
   }
 

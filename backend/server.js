@@ -35,6 +35,8 @@ app.use("/auth", require("./routes/auth"));
 
 app.use("/dashboard", require("./routes/dashboard"));
 
+app.use("/register", require("./routes/register"));
+
 app.post("/auth/googleone/", (req, res) => {
   console.log(req.body);
   res.end("done");
