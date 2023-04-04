@@ -16,14 +16,17 @@ const UserSchema = new mongoose.Schema({
   branch: {
     type: String,
     required: false,
+    default: null,
   },
   rollno: {
     type: Number,
     required: false,
+    default: null,
   },
-  year: {
+  semester: {
     type: Number,
     required: false,
+    default: null,
   },
   lastLogin: {
     type: Date,

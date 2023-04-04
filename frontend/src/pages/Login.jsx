@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { GoogleCredentialResponse } from "@react-oauth/google";
 import "./Styles.css";
@@ -9,9 +9,13 @@ import { LoginContext } from "../contexts/LoginContext";
 
 function Login() {
   const [token, setToken] = useState(null);
+  const [branch, setBranch] = useState(null);
+  const [semester, setSemester] = useState(null);
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const logindetails = useContext(LoginContext);
   const { toggleAdmin, toggleLoggedIn } = useContext(LoginContext);
+  const { semester2 } = useParams();
 
   const handleFailure = () => {
     console.log("Failed to authenticate with Google");
@@ -32,10 +36,12 @@ function Login() {
         setToken(token);
         const details = jwt(token);
         console.log(details);
-        if(details.isAdmin) toggleAdmin();
+        if (details.isAdmin) toggleAdmin();
         toggleLoggedIn();
-        if (details.isFirstLogin) navigate("/register");
-        else navigate("/dashboard");
+        setEmail(details.email);
+        // navigate(`/register/${details.email}`);
+        if (details.isFirstLogin) navigate(`/register/${details.email}`);
+        else navigate(`/dashboard/${semester2}`);
       })
       .catch((error) => {
         console.log(error);
@@ -101,6 +107,9 @@ function Login() {
                     logo_alignment="center"
                     onSuccess={(credentialResponse) => {
                       return handleSuccess(credentialResponse);
+                      {
+                        console.log(logindetails.email);
+                      }
                     }}
                     onError={() => {
                       handleFailure();

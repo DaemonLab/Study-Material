@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { LoginContext } from "../contexts/LoginContext";
 
 function Register() {
   const [rollno, setRollno] = useState("");
   const [branch, setBranch] = useState("");
-  const [year, setYear] = useState("");
+  const [semester, setSemester] = useState("");
+  const logindetails = useContext(LoginContext);
+  const navigate = useNavigate();
+  const { email, semester2 } = useParams();
 
-  async function register(e) {
-    e.preventDefault();
-    const response = await fetch('http://localhost:3001/register', {
-      method: 'POST',
-      body: JSON.stringify({rollno, branch, year}),
-      headers: {'Content-Type':'application/json'},
-    });
-    if(response.status === 200) {
-      alert('Registration Successfull');
-      
-    } else {
-      alert('Registration failed.');
+  async function register() {
+    try {
+      await axios
+        .post("http://localhost:8080/register", {
+          email,
+          branch,
+          rollno,
+          semester,
+        })
+        .then(navigate(`/dashboard/${semester2}`));
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -91,18 +97,18 @@ function Register() {
                 <br />
                 <div className="col-md">
                   <div className="form-floating">
-                    <select
-                      className="form-select"
-                      id="floatingSelectGrid"
-                      value={year}
-                      onChange={(e) => setYear(e.target.value)}
-                    >
-                      <option selected>1st year</option>
-                      <option value="1">2nd year</option>
-                      <option value="2">3rd year</option>
-                      <option value="3">4th year</option>
-                    </select>
-                    <label htmlFor="floatingSelectGrid">Select Year</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputGrid"
+                      value={semester}
+                      onChange={(e) => {
+                        setSemester(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="floatingSelectGrid">
+                      Enter the semester you are in:
+                    </label>
                   </div>
                 </div>
               </div>

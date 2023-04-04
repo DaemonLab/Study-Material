@@ -27,7 +27,6 @@ function Dashboard() {
   const navigate = useNavigate();
 
   async function upload(e) {
-
     let data = new FormData();
     data.append("name", name);
     data.append("course", course);
@@ -89,7 +88,7 @@ function Dashboard() {
               <button
                 className="btn btn-secondary"
                 onClick={() => {
-                  navigate("/notes");
+                  useNavigate("/material/notes");
                 }}
               >
                 View More
@@ -104,7 +103,14 @@ function Dashboard() {
               <p className="card-text">
                 Expertly curated by our faculty from best of the sources
               </p>
-              <button className="btn btn-secondary">View More</button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  useNavigate("/material/tutorials");
+                }}
+              >
+                View More
+              </button>
             </div>
           </div>
 
@@ -120,7 +126,14 @@ function Dashboard() {
               <p className="card-text">
                 Mid-semester and end-semester question papers of past years
               </p>
-              <button className="btn btn-secondary">View More</button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  useNavigate("/material/questionpapers");
+                }}
+              >
+                View More
+              </button>
             </div>
           </div>
 
@@ -131,7 +144,14 @@ function Dashboard() {
               <p className="card-text">
                 Recommemded textbooks and additional resources
               </p>
-              <button className="btn btn-secondary">View More</button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  useNavigate("/material/books");
+                }}
+              >
+                View More
+              </button>
             </div>
           </div>
         </div>

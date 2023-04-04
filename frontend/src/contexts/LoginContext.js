@@ -6,6 +6,9 @@ class LoginContextProvider extends Component {
   state = {
     isLoggedIn: false,
     isAdmin: false,
+    branch: null,
+    semester: null,
+    email: null,
   }
   toggleAdmin = () => {
     this.setState({isAdmin : !this.state.isAdmin});

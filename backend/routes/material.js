@@ -36,6 +36,7 @@ const drive = google.drive({
 router.post("/upload", async (req, res) => {
   try {
     const data = req.body;
+    const file = req.files.file;
 
     // await uploadToRemoteBucket(req.file.path);
     const response = await drive.files.create({
