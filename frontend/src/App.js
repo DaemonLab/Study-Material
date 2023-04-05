@@ -21,7 +21,7 @@ function App() {
               <Route path="/dashboard/:semester2" element={<Dashboard />} />
               <Route path="/" element={<Login />} />
               <Route path="/register/:email" element={<Register />} />
-              <Route path="/material/:type" element={<Content />}></Route>
+              <Route path="/material/:type/:semester" element={<Content />}></Route>
             </Routes>
           </div>
         </Router>

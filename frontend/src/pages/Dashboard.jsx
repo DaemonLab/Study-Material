@@ -7,7 +7,7 @@ import QuestionPapers from "./Images/qPapers.jpg";
 import Books from "./Images/books.jpg";
 import LoginContextProvider from "../contexts/LoginContext";
 import { LoginContext } from "../contexts/LoginContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 Dashboard.contextType = LoginContext;
@@ -16,28 +16,33 @@ function Dashboard() {
   const [name, setName] = useState("");
   const [course, setCourse] = useState("");
   const [type, setType] = useState("");
-  const [file, setFile] = useState();
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  const [file, setFile] = useState("");
+  const { semester2 } = useParams();
+  const types = ['notes', 'tutorials', 'questionpapers', 'books'];
 
   const logindetails = useContext(LoginContext);
   console.log(logindetails);
   const navigate = useNavigate();
 
-  async function upload(e) {
-    let data = new FormData();
-    data.append("name", name);
-    data.append("course", course);
-    data.append("type", type);
-    data.append("file", file);
-    e.preventDefault();
-    const config = {
-      headers: { "content-type": "multipart/form-data" },
-    };
+  async function upload() {
+    let formData = new FormData();
+    formData.append("name", name);
+    formData.append("file", file);
+    formData.append("type", type);
+    formData.append("course", course);
+    console.log(file);
+    for (var key of formData.entries()) {
+      console.log(key[0] + ", " + key[1]);
+    }
     await axios
-      .post("http://localhost:8080/material/upload", data, config)
+      .post(
+        "http://localhost:8080/material/upload", formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         alert("Upload Successfully");
       })
@@ -88,7 +93,7 @@ function Dashboard() {
               <button
                 className="btn btn-secondary"
                 onClick={() => {
-                  useNavigate("/material/notes");
+                  navigate(`/material/${types[0]}/${semester2}`);
                 }}
               >
                 View More
@@ -106,7 +111,7 @@ function Dashboard() {
               <button
                 className="btn btn-secondary"
                 onClick={() => {
-                  useNavigate("/material/tutorials");
+                  navigate(`/material/${types[1]}/${semester2}`);
                 }}
               >
                 View More
@@ -129,7 +134,7 @@ function Dashboard() {
               <button
                 className="btn btn-secondary"
                 onClick={() => {
-                  useNavigate("/material/questionpapers");
+                  navigate(`/material/${types[2]}/${semester2}`);
                 }}
               >
                 View More
@@ -147,7 +152,7 @@ function Dashboard() {
               <button
                 className="btn btn-secondary"
                 onClick={() => {
-                  useNavigate("/material/books");
+                  navigate(`/material/${types[3]}/${semester2}`);
                 }}
               >
                 View More
@@ -164,56 +169,55 @@ function Dashboard() {
           <h2 className="mx-1" style={{ margin: "2%" }}>
             Upload New Material
           </h2>
-          <form>
-            <label htmlFor="name">Name of the material</label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-            <input
-              className="form-control"
-              type="file"
-              name="file"
-              id="file"
-              onChange={handleFileChange}
-            />
-            <br />
-            <select
-              class="form-select"
-              placeholder="Type"
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-            >
-              <option selected>Select the type of this document</option>
-              <option value="Lecture Notes">Lecture Notes</option>
-              <option value="Tutorial">Tutorial</option>
-              <option value="Question Paper">Question Paper</option>
-              <option value="Book">Book</option>
-            </select>
-            <br />
-            <label htmlFor="course">Course Code (without spaces) </label>
-            <input
-              type="text"
-              className="form-control"
-              name="course"
-              onChange={(e) => {
-                setCourse(e.target.value);
-              }}
-            />
-            <br />
-            <button
-              type="submit"
-              className="btn btn-secondary"
-              onClick={upload}
-            >
-              Upload
-            </button>
-          </form>
+
+          <label htmlFor="name">Name of the material</label>
+          <input
+            type="text"
+            className="form-control"
+            name="name"
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+          <br />
+          <input
+            className="form-control"
+            type="file"
+            name="file"
+            id="file"
+            onChange={(e) => {
+              setFile(e.target.files[0]);
+              console.log(e.target.files[0]);
+            }}
+          />
+          <br />
+          <select
+            class="form-select"
+            placeholder="Type"
+            onChange={(e) => {
+              setType(e.target.value);
+            }}
+          >
+            <option selected>Select the type of this document</option>
+            <option value="Lecture Notes">Lecture Notes</option>
+            <option value="Tutorial">Tutorial</option>
+            <option value="Question Paper">Question Paper</option>
+            <option value="Book">Book</option>
+          </select>
+          <br />
+          <label htmlFor="course">Course Code (without spaces) </label>
+          <input
+            type="text"
+            className="form-control"
+            name="course"
+            onChange={(e) => {
+              setCourse(e.target.value);
+            }}
+          />
+          <br />
+          <button type="submit" className="btn btn-secondary" onClick={upload}>
+            Upload
+          </button>
         </div>
       )}
     </div>

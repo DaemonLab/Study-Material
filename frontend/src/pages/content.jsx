@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-function Notes() {
+function Content() {
   const [notes, setNotes] = useState([]);
-  const [counter, setCounter] = useState(0);
-  const {type} = useParams;
+  const { type, semester } = useParams();
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/material/${type}`)
+      .get(`http://localhost:8080/material/${type}`, { semester })
       .then((response) => {
         setNotes(response.data);
       });
@@ -29,7 +28,7 @@ function Notes() {
           {notes.map((item) => (
             <tr key={item._id}>
               <td>{item.name}</td>
-              <td>{item.link}</td>
+              <td><a href={item.link} target="_blank">View File</a></td>
               <td>{item.course}</td>
             </tr>
           ))}
@@ -40,4 +39,4 @@ function Notes() {
   );
 }
 
-export default Notes;
+export default Content;

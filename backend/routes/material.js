@@ -6,8 +6,10 @@ const config = require("../config/config");
 const db = require("../config/db");
 const multer = require("multer");
 const fs = require("fs");
-
+const upload = multer({ dest: "../files/" });
 const router = express.Router();
+
+const multiparty = require("multiparty");
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, callback) => {
@@ -20,23 +22,31 @@ const router = express.Router();
 
 // const upload = multer({ storage: storage }).single("file");
 
-const oauth2Client = new google.auth.OAuth2(
-  config.googleClientId,
-  config.googleClientSecret,
-  config.redirectUri
-);
-
-oauth2Client.setCredentials({ refresh_token: config.refreshToken });
-
-const drive = google.drive({
-  version: "v3",
-  auth: oauth2Client,
-});
-
-router.post("/upload", async (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
+  // let form = new multiparty.Form();
+  // form.parse(req, function(err, fields, files) {
+  //   Object.keys(fields).forEach(function(name) {
+  //     console.log(name);
+  //   })
+  // });
+  // // console.log(form);
   try {
     const data = req.body;
-    const file = req.files.file;
+    const file = req.file;
+    console.log(data);
+
+    const oauth2Client = new google.auth.OAuth2(
+      config.googleClientId,
+      config.googleClientSecret,
+      config.redirectUri
+    );
+
+    oauth2Client.setCredentials({ refresh_token: config.refreshToken });
+
+    const drive = google.drive({
+      version: "v3",
+      auth: oauth2Client,
+    });
 
     // await uploadToRemoteBucket(req.file.path);
     const response = await drive.files.create({
@@ -46,11 +56,13 @@ router.post("/upload", async (req, res) => {
       },
       media: {
         mimeType: "application/pdf",
-        body: req.file.path,
+        body: file.data,
       },
+      fields: "id, webViewLink, webContentLink", // Return the file ID and public URL
+      supportsAllDrives: true,
     });
-    console.log(response.data)
-
+    console.log(response.data);
+    const url = response.data.webViewLink;
     const fileId = response.data.id;
     await drive.permissions.create({
       fileId: fileId,
@@ -66,20 +78,12 @@ router.post("/upload", async (req, res) => {
     });
     console.log(result.data);
 
-    const newMaterial = new Material({
+    let material = await Material.create({
       name: data.name,
-      link: result.data.webViewLink,
+      link: url,
       type: data.type,
       course: data.course,
     });
-    let material = Material.create({
-        name: data.name,
-        link: result.data.webViewLink,
-        type: data.type,
-        course: data.course,
-    });
-
-    await newMaterial.save();
   } catch (error) {
     console.log(error.message);
     res.status(400).send(error);

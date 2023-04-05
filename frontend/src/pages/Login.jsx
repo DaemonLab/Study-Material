@@ -41,7 +41,7 @@ function Login() {
         setEmail(details.email);
         // navigate(`/register/${details.email}`);
         if (details.isFirstLogin) navigate(`/register/${details.email}`);
-        else navigate(`/dashboard/${semester2}`);
+        else navigate(`/dashboard/${details.semester}`);
       })
       .catch((error) => {
         console.log(error);

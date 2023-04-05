@@ -29,7 +29,7 @@ router.post("/google", async (req, res) => {
         isFirstLogin = false;
       }
       const token = jwt.sign(
-        { name, email, isFirstLogin: !user.lastLogin, isAdmin: user.isAdmin },
+        { name, email, isFirstLogin: !user.lastLogin, isAdmin: user.isAdmin, semester: user.semester, branch: user.branch },
         jwtSecret
       );
       user.lastLogin = Date.now();
