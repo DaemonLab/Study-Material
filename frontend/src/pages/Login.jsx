@@ -31,7 +31,9 @@ function Login() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        if (response.data === "You should login with institute email id") {
+          throw "You should login with institute email id";
+        }
         const token = response.data;
         setToken(token);
         const details = jwt(token);
@@ -44,7 +46,9 @@ function Login() {
         else navigate(`/dashboard/${details.semester}`);
       })
       .catch((error) => {
+        alert(error);
         console.log(error);
+        navigate("/");
       });
   };
 
@@ -93,30 +97,26 @@ function Login() {
                 marginRight: "auto",
               }}
             >
-              {token ? (
-                <div>You are logged in with token: {token}</div>
-              ) : (
-                <div style={{ marginLeft: "13%" }}>
-                  <GoogleLogin
-                    type="standard"
-                    theme="filled_blue"
-                    size="large"
-                    text="continue_with"
-                    shape="pill"
-                    width="1000"
-                    logo_alignment="center"
-                    onSuccess={(credentialResponse) => {
-                      return handleSuccess(credentialResponse);
-                      {
-                        console.log(logindetails.email);
-                      }
-                    }}
-                    onError={() => {
-                      handleFailure();
-                    }}
-                  />
-                </div>
-              )}
+              <div style={{ marginLeft: "13%" }}>
+                <GoogleLogin
+                  type="standard"
+                  theme="filled_blue"
+                  size="large"
+                  text="continue_with"
+                  shape="pill"
+                  width="1000"
+                  logo_alignment="center"
+                  onSuccess={(credentialResponse) => {
+                    return handleSuccess(credentialResponse);
+                    {
+                      console.log(logindetails.email);
+                    }
+                  }}
+                  onError={() => {
+                    handleFailure();
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

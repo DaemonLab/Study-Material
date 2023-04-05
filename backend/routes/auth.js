@@ -13,39 +13,39 @@ router.post("/google", async (req, res) => {
     const CLIENT_ID = data.clientId;
     const idToken = data.credential;
     const client = new OAuth2Client(CLIENT_ID);
-
-    async function verify() {
-      const ticket = await client.verifyIdToken({
-        idToken: idToken,
-        audience: CLIENT_ID,
-      });
-      const { name, email } = ticket.getPayload();
-      let user = await User.findOne({ email });
-      if (!user) {
-        // This is the user's first login
-        user = await User.create({ name, email });
-        isFirstLogin = true;
-      } else {
-        isFirstLogin = false;
-      }
-      const token = jwt.sign(
-        { name, email, isFirstLogin: !user.lastLogin, isAdmin: user.isAdmin, semester: user.semester, branch: user.branch },
-        jwtSecret
-      );
-      user.lastLogin = Date.now();
-      await user.save();
-      console.log(isFirstLogin);
-      return token;
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+      audience: CLIENT_ID,
+    });
+    const { name, email } = ticket.getPayload();
+    if (!email.includes("@iiti.ac.in")) {
+      throw "You should login with institute email id";
     }
-    verify()
-      .then((response) => {
-        res.status(200).send(response);
-      })
-      .catch((error) => {
-        res.status(201).send(error);
-      });
+    let user = await User.findOne({ email });
+    if (!user) {
+      // This is the user's first login
+      user = await User.create({ name, email });
+      isFirstLogin = true;
+    } else {
+      isFirstLogin = false;
+    }
+    const token = jwt.sign(
+      {
+        name,
+        email,
+        isFirstLogin: !user.lastLogin,
+        isAdmin: user.isAdmin,
+        semester: user.semester,
+        branch: user.branch,
+      },
+      jwtSecret
+    );
+    user.lastLogin = Date.now();
+    await user.save();
+    console.log(isFirstLogin);
+    res.status(200).send(token);
   } catch (error) {
-    res.status(401).send({ message: error });
+    res.status(201).send(error);
   }
 });
 
