@@ -4,32 +4,35 @@ const { google } = require("googleapis");
 const Material = require("../models/Material");
 const config = require("../config/config");
 const db = require("../config/db");
-const multer = require("multer");
+const Multer = require("multer");
 const fs = require("fs");
-const upload = multer({ dest: "../files/" });
+
 const router = express.Router();
 
-const multiparty = require("multiparty");
+const multer = Multer({
+  storage: Multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, `../files`);
+    },
+    filename: function (req, file, callback) {
+      callback(
+        null,
+        file.fieldname + "_" + Date.now() + "_" + file.originalname
+      );
+    },
+  }),
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, callback) => {
-//     callback(null, "../files");
-//   },
-//   filename: (req, file, callback) => {
-//     callback(null, `${file.fieldname}-${Date.now()}`);
-//   },
-// });
+const deleteFile = (filePath) => {
+  fs.unlink(filePath, () => {
+    console.log("file deleted");
+  });
+};
 
-// const upload = multer({ storage: storage }).single("file");
-
-router.post("/upload", upload.single("file"), async (req, res) => {
-  // let form = new multiparty.Form();
-  // form.parse(req, function(err, fields, files) {
-  //   Object.keys(fields).forEach(function(name) {
-  //     console.log(name);
-  //   })
-  // });
-  // // console.log(form);
+router.post("/upload", multer.single("file"), async (req, res) => {
   try {
     const data = req.body;
     const file = req.file;
@@ -48,15 +51,14 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       auth: oauth2Client,
     });
 
-    // await uploadToRemoteBucket(req.file.path);
     const response = await drive.files.create({
       requestBody: {
         name: data.name,
-        mimeType: "application/pdf",
+        mimeType: file.mimetype,
       },
       media: {
-        mimeType: "application/pdf",
-        body: file.data,
+        mimeType: file.mimetype,
+        body: fs.createReadStream(file.path),
       },
       fields: "id, webViewLink, webContentLink", // Return the file ID and public URL
       supportsAllDrives: true,
@@ -83,7 +85,12 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       link: url,
       type: data.type,
       course: data.course,
+      semester: data.semester,
     });
+    material.save();
+
+    deleteFile(req.file.path);
+    res.status(200).send("Uploaded Successfully");
   } catch (error) {
     console.log(error.message);
     res.status(400).send(error);

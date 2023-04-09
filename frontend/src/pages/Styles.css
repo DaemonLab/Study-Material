@@ -59,9 +59,6 @@
     size: 2cm;
 }
 
-.navbar.bg-body-tertiary{
-    display: flex;
-}
 .btn.btn-primary{
     margin: 5px;
 }

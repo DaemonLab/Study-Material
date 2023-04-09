@@ -1,26 +1,25 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { LoginContext } from "../contexts/LoginContext";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Register() {
+function Register(props) {
   const [rollno, setRollno] = useState("");
   const [branch, setBranch] = useState("");
   const [semester, setSemester] = useState("");
-  const logindetails = useContext(LoginContext);
   const navigate = useNavigate();
-  const { email, semester2 } = useParams();
-
-  async function register() {
+  async function register(props) {
     try {
       await axios
         .post("http://localhost:8080/register", {
-          email,
+          email: props.email,
           branch,
           rollno,
           semester,
         })
-        .then(navigate(`/dashboard/${semester2}`));
+        .then(() => {
+          props.changeSemester(semester);
+          navigate(`/dashboard`);
+        });
     } catch (err) {
       console.log(err);
     }

@@ -1,31 +1,122 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Cards from "./components/Cards";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
-import Semester3 from "./components/CSE/Semester3";
-import LoginContextProvider from "./contexts/LoginContext";
 import Content from "./pages/Content";
+import { useState } from "react";
 
 function App() {
+  const [email, setEmail] = useState(localStorage.getItem("email"));
+  const [type, setType] = useState(localStorage.getItem("type"));
+  const [semester, setSemester] = useState(localStorage.getItem("semester"));
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn")
+  );
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin"));
+
+  const changeEmail = (email) => {
+    setEmail(email);
+    localStorage.setItem("email", email);
+  };
+  const changeType = (type) => {
+    setType(type);
+  };
+  const changeSemester = (semester) => {
+    setSemester(semester);
+    localStorage.setItem("semester", semester);
+  };
+  const toggleLoggedIn = () => {
+    setIsLoggedIn(!isLoggedIn);
+    localStorage.setItem("isLoggedIn", isLoggedIn);
+  };
+  const toggleAdmin = (isAdmin) => {
+    setIsAdmin(isAdmin);
+    localStorage.setItem("isAdmin", isAdmin);
+  };
+
   return (
     <>
-      <LoginContextProvider>
-        <Router>
-          <div className="container">
-            <Navbar />
-            <Routes>
-              <Route path="/dashboard/:semester2" element={<Dashboard />} />
+      <Router>
+        <Navbar isAdmin={isAdmin} toggleLoggedIn={toggleLoggedIn} />
+        <Routes>
+          {/* <Route
+                path="/dashboard/:semester2"
+                element={<Dashboard changeSemester={changeSemester} />}
+              />
               <Route path="/" element={<Login />} />
-              <Route path="/register/:email" element={<Register />} />
-              <Route path="/material/:type/:semester" element={<Content />}></Route>
-            </Routes>
-          </div>
-        </Router>
-      </LoginContextProvider>
+              <Route
+                path="/register/:email"
+                element={<Register changeEmail={changeEmail} />}
+              />
+              <Route
+                path="/material/:type/:semester"
+                element={
+                  <Content
+                    changeType={changeType}
+                    changeSemester={changeSemester}
+                  />
+                }
+              ></Route> */}
+          <Route
+            path="/dashboard"
+            element={
+              <Dashboard
+                changeSemester={changeSemester}
+                semester={semester}
+                isAdmin={isAdmin}
+                isLoggedIn={isLoggedIn}
+                toggleAdmin={toggleAdmin}
+                toggleLoggedIn={toggleLoggedIn}
+              />
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <Login
+                changeEmail={changeEmail}
+                changeSemester={changeSemester}
+                isAdmin={isAdmin}
+                isLoggedIn={isLoggedIn}
+                toggleAdmin={toggleAdmin}
+                toggleLoggedIn={toggleLoggedIn}
+              />
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <Register
+                changeEmail={changeEmail}
+                email={email}
+                changeSemester={changeSemester}
+                isAdmin={isAdmin}
+                isLoggedIn={isLoggedIn}
+                toggleAdmin={toggleAdmin}
+                toggleLoggedIn={toggleLoggedIn}
+              />
+            }
+          />
+          <Route
+            path="/material/:type"
+            element={
+              <Content
+                changeType={changeType}
+                changeSemester={changeSemester}
+                type={type}
+                semester={semester}
+                isAdmin={isAdmin}
+                isLoggedIn={isLoggedIn}
+                toggleAdmin={toggleAdmin}
+                toggleLoggedIn={toggleLoggedIn}
+              />
+            }
+          ></Route>
+        </Routes>
+      </Router>
     </>
   );
 }

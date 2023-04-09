@@ -1,79 +1,39 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Styles.css";
-import { LoginContext } from "../contexts/LoginContext";
 
-export default function Navbar() {
+export default function Navbar(props) {
   const navigate = useNavigate();
-  const logindetails = useContext(LoginContext);
-  const { toggleLoggedIn } = useContext(LoginContext);
-  console.log(logindetails);
+
   const logout = () => {
-    toggleLoggedIn();
+    props.toggleLoggedIn();
     navigate("/");
-  }
+  };
   return (
-    <nav className="navbar navbar-expand-lg bg-dark navbar-dark" style={{color:"white"}}>
-      <div className="container-fluid">
-        <a className="navbar-brand" href="/">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/en/c/c4/Indian_Institute_of_Technology%2C_Indore_Logo.png"
-            alt="logo"
-            height="50"
-            width="50"
-          />
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 mb-3">
+      <div class="container">
+        <a href="/" class="navbar-brand">
+          IITI Study Material
         </a>
+
         <button
-          className="navbar-toggler"
+          class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-bs-target="#navmenu"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/">
-                Home
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/">
-                Profile
-              </a>
-            </li>
-          </ul>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
-          <ul className="navbar-nav mb-2 mb-lg-0 ms-1">
-            <li>
-              {!logindetails.isLoggedIn && (
-                <button
-                  className="btn btn-secondary me-1"
-                  onClick={() => navigate("/")}
-                >
-                  Login
-                </button>
-              )}
-            </li>
-            <li>
-              {logindetails.isLoggedIn && (
-                <button className="btn btn-danger" onClick={()=>{ logout(); }} >Logout</button>
-              )}
-            </li>
+
+        <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav ms-auto">
+            {props.isLoggedIn && (
+              <li class="nav-item">
+                <a href={logout} class="nav-link" >
+                  Logout
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>
