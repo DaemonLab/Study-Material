@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const bodyparser = require("body-parser");
 const { connectDB } = require("./config/db");
-const session = require("express-session");
 const config = require("./config/config");
 const courseRoutes = require("./routes/addCourse");
 const loginRoute = require("./routes/login");
@@ -12,13 +11,24 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const User = require("./models/User");
 
-
 connectDB();
 
 const app = express();
 
+let whitelist = ["http://localhost:3000", "http://localhost:80"];
+let corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
 // app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyparser.json());
 // app.use(
 //   bodyparser.urlencoded({

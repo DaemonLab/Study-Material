@@ -1,16 +1,18 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Styles.css";
+import {motion} from 'framer-motion';
 
 export default function Navbar(props) {
   const navigate = useNavigate();
 
   const logout = () => {
-    props.toggleLoggedIn();
+    sessionStorage.clear();
     navigate("/");
   };
+
   return (
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 mb-3">
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3">
       <div class="container">
         <a href="/" class="navbar-brand">
           IITI Study Material
@@ -27,11 +29,11 @@ export default function Navbar(props) {
 
         <div class="collapse navbar-collapse" id="navmenu">
           <ul class="navbar-nav ms-auto">
-            {props.isLoggedIn && (
+            {sessionStorage.getItem("isLoggedIn") && (
               <li class="nav-item">
-                <a href={logout} class="nav-link" >
+                <motion.button whileHover={{scale:1.1}} className="btn btn-danger" onClick={logout}>
                   Logout
-                </a>
+                </motion.button>
               </li>
             )}
           </ul>

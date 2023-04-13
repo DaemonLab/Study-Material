@@ -9,37 +9,44 @@ import Content from "./pages/Content";
 import { useState } from "react";
 
 function App() {
-  const [email, setEmail] = useState(localStorage.getItem("email"));
-  const [type, setType] = useState(localStorage.getItem("type"));
-  const [semester, setSemester] = useState(localStorage.getItem("semester"));
+
+  const [email, setEmail] = useState(sessionStorage.getItem("email"));
+  const [type, setType] = useState(sessionStorage.getItem("type"));
+  const [semester, setSemester] = useState(sessionStorage.getItem("semester"));
   const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn")
+    sessionStorage.getItem("isLoggedIn")
   );
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin"));
+  const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("isAdmin"));
 
   const changeEmail = (email) => {
     setEmail(email);
-    localStorage.setItem("email", email);
+    sessionStorage.setItem("email", email);
   };
   const changeType = (type) => {
     setType(type);
   };
   const changeSemester = (semester) => {
     setSemester(semester);
-    localStorage.setItem("semester", semester);
+    sessionStorage.setItem("semester", semester);
   };
   const toggleLoggedIn = () => {
     setIsLoggedIn(!isLoggedIn);
-    localStorage.setItem("isLoggedIn", isLoggedIn);
+    sessionStorage.setItem("isLoggedIn", isLoggedIn);
   };
   const toggleAdmin = (isAdmin) => {
     setIsAdmin(isAdmin);
-    localStorage.setItem("isAdmin", isAdmin);
+    sessionStorage.setItem("isAdmin", isAdmin);
   };
 
   return (
     <>
       <Router>
+        <style>
+          <style>
+            @import
+            url('https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap');
+          </style>
+        </style>
         <Navbar isAdmin={isAdmin} toggleLoggedIn={toggleLoggedIn} />
         <Routes>
           {/* <Route

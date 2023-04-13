@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const { OAuth2Client } = require("google-auth-library");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
@@ -6,7 +7,7 @@ const User = require("../models/User");
 const config = require("../config/config");
 const jwtSecret = crypto.randomBytes(64).toString("hex");
 const router = express.Router();
-router.post("/google", async (req, res) => {
+router.post("/google", async (req, res, next) => {
   try {
     const data = req.body;
     console.log(data);
@@ -43,6 +44,7 @@ router.post("/google", async (req, res) => {
     user.lastLogin = Date.now();
     await user.save();
     console.log(isFirstLogin);
+    next();
     res.status(200).send(token);
   } catch (error) {
     res.status(201).send(error);
