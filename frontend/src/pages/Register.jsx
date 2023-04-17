@@ -6,22 +6,27 @@ import Footer from "../components/Footer";
 
 function Register(props) {
   const [rollno, setRollno] = useState("");
-  const [branch, setBranch] = useState("");
+  const [branch, setBranch] = useState("CSE");
   const [semester, setSemester] = useState("");
   const navigate = useNavigate();
-  async function register(props) {
+
+
+  async function register() {
     try {
+      console.log('started');
       await axios
         .post("http://localhost:8080/register", {
-          email: props.email,
+          email: sessionStorage.getItem("email"),
           branch,
           rollno,
           semester,
         })
-        .then(() => {
-          props.changeSemester(semester);
-          navigate(`/dashboard`);
-        });
+        .then((response) => {
+          console.log(response);
+          sessionStorage.setItem("semester", semester);
+          navigate("/dashboard");
+        })
+        .catch((err) => console.log(err));
     } catch (err) {
       console.log(err);
     }
@@ -74,7 +79,6 @@ function Register(props) {
                 id="form"
                 style={{ marginTop: "auto", marginBottom: "auto" }}
               >
-                <form onSubmit={register} id="form" data-bs-theme="dark">
                   <div className="card-body" data-bs-theme="dark" id="form">
                     <div className="col-md" data-bs-theme="dark">
                       <div
@@ -134,11 +138,11 @@ function Register(props) {
                       whileHover={{ scale: 1.1 }}
                       class="btn btn-success ms-3"
                       type="submit"
+                      onClick={register}
                     >
                       Register
                     </motion.button>
                   </div>
-                </form>
               </div>
             </div>
           </div>

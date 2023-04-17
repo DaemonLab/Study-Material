@@ -17,14 +17,6 @@ function Login(props) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const container = {
-    visible: {
-      transition: {
-        staggerChildren: 0.025,
-      },
-    },
-  };
-
   const handleFailure = () => {
     console.log("Failed to authenticate with Google");
   };
