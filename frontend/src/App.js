@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
-import Content from "./pages/content";
+import Content from "./pages/Content";
 import { useState } from "react";
 
 function App() {
