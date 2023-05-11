@@ -118,18 +118,22 @@ function Register(props) {
                     <br />
                     <div className="col-md">
                       <div className="form-floating">
-                        <input
-                          type="text"
-                          className="form-control"
+                        <select
+                          className="form-select"
                           id="form"
                           value={semester}
-                          onChange={(e) => {
-                            setSemester(e.target.value);
-                          }}
-                        />
-                        <label htmlFor="floatingSelectGrid">
-                          Enter the semester you are in:
-                        </label>
+                          onChange={(e) => setSemester(e.target.value)}
+                        >
+                          <option value="1">Semester 1</option>
+                          <option value="2">Semester 2</option>
+                          <option value="3">Semester 3</option>
+                          <option value="4">Semester 4</option>
+                          <option value="5">Semester 5</option>
+                          <option value="6">Semester 6</option>
+                          <option value="7">Semester 7</option>
+                          <option value="8">Semester 8</option>
+                        </select>
+                        <label htmlFor="floatingSelectGrid">Select Semester</label>
                       </div>
                     </div>
                   </div>
