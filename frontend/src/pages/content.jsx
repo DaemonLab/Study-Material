@@ -69,17 +69,6 @@ function Content(props) {
                     ))}
                   </tbody>
                 </motion.table>
-                <div className="d-flex justify-content-end">
-                  <motion.button
-                    whileHover={{ backgroundColor: "rgb(1,1,1)", scale: 1.1 }}
-                    className="btn btn-danger"
-                    onClick={() => {
-                      navigate("/dashboard");
-                    }}
-                  >
-                    Go Back
-                  </motion.button>
-                </div>
               </div>
             )}
             <Footer />
