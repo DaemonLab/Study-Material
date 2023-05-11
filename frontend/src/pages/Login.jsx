@@ -108,7 +108,7 @@ function Login(props) {
                     Login with your insititute google account
                   </h3>
 
-                  <motion.div className="flex-item">
+                  <motion.div className="flex-item d-flex mx-auto" whileHover={{scale:1.1}}>
                     <GoogleLogin
                       type="standard"
                       theme="filled_black"
