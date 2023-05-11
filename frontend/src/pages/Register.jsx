@@ -136,7 +136,7 @@ function Register(props) {
                   <div className="form-floating">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
-                      class="btn btn-success ms-3"
+                      class="btn btn-success my-3 mx-auto d-flex align-items-center"
                       type="submit"
                       onClick={register}
                     >
