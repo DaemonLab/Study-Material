@@ -17,9 +17,9 @@ export default function() {
         style={{ color: "white" }}
       >
         <div className="footer-copyright text-center py-3">
-          © 2023 Copyright: Programming Club IITI <br />
+          © 2023 Copyright: The Programming Club IITI <br />
           <div className="d-flex flex-row flex-wrap justify-content-center">
-            <a href="/"> progclub.iiti.ac.in</a>
+            <a href="http://progclub.iiti.ac.in/">progclub.iiti.ac.in</a>
             <div className="mx-1">
               <a
                 class="fa-brands fa-instagram"
