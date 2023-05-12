@@ -58,6 +58,19 @@ function Login(props) {
 
   return (
     <>
+
+      <Helmet>
+        <title>IITI Study Material</title>
+        <meta
+          name="description"
+          content="Discover and upload educational content."
+        />
+        <meta
+          name="keywords"
+          content="iiti, study material, iit, notes"
+        />
+      </Helmet>
+    
       {loading ? (
         <Loading />
       ) : (

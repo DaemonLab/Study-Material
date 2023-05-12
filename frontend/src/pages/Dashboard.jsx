@@ -9,6 +9,7 @@ import Loading from "../components/Loading";
 import axios from "axios";
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from 'react-helmet';
 
 function Dashboard(props) {
   const [loading, setLoading] = useState(false);
@@ -51,6 +52,15 @@ function Dashboard(props) {
   return (
     <AnimatePresence>
     <div data-bs-theme="dark" id="form">
+
+      <Helmet>
+        <title>Dashboard - IITI Study Material</title>
+        <meta
+          name="description"
+          content="Discover and upload educational content."
+        />
+      </Helmet>
+
       {loading ? (
         <Loading />
       ) : (
