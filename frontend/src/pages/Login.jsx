@@ -8,6 +8,8 @@ import jwt from "jwt-decode";
 import Loading from "../components/Loading";
 import { motion } from "framer-motion";
 import Footer from "../components/Footer";
+import { Helmet } from 'react-helmet';
+
 
 function Login(props) {
   const [token, setToken] = useState(null);
