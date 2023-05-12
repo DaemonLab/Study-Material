@@ -24,14 +24,14 @@ export default function() {
               <a
                 class="fa-brands fa-instagram"
                 href="https://www.instagram.com/pclub_iiti/"
-                style={{textDecoration:"none", color: "white"}}
+                style={{ textDecoration: "none", color: "white" }}
               ></a>
             </div>
             <div className="mx-1">
               <a
                 class="fa-brands fa-linkedin"
                 href="https://in.linkedin.com/company/progclub-iiti?original_referer=https%3A%2F%2Fwww.google.com%2F"
-                style={{textDecoration:"none", color: "white"}}
+                style={{ textDecoration: "none", color: "white" }}
               ></a>
             </div>
           </div>
